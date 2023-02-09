@@ -1,9 +1,24 @@
 <template>
-  <div class="app"></div>
+  <div class="app">
+    <h1>Страница с постами</h1>
+    <my-button @click="showDialog">Создать пост </my-button>
+    <my-dialog v-model:show="dialogVis">
+      <post-form @create="createPost" />
+    </my-dialog>
+
+    <post-list :posts="posts" @remove="removePost" />
+  </div>
 </template>
 
 <script>
+import PostForm from "@/components/PostForm";
+import PostList from "@/components/PostList";
+
 export default {
+  components: {
+    PostList,
+    PostForm,
+  },
   data() {
     return {
       posts: [
@@ -11,20 +26,19 @@ export default {
         { id: 2, title: "Python", body: "Описание поста 2" },
         { id: 3, title: "Ruby", body: "Описание поста 3" },
       ],
-      title: "",
-      body: "",
+      dialogVis: false,
     };
   },
   methods: {
-    addPost() {
-      const newPost = {
-        id: Date.now(),
-        title: this.title,
-        body: this.body,
-      };
-      this.posts.push(newPost);
-      this.title = "";
-      this.body = "";
+    createPost(post) {
+      this.posts.push(post);
+      this.dialogVis = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVis = true;
     },
   },
 };
@@ -43,23 +57,5 @@ export default {
 }
 .app {
   padding: 20px;
-}
-form {
-  display: flex;
-  flex-direction: column;
-}
-.btn {
-  align-self: flex-end;
-  padding: 10px 15px;
-  background: none;
-  margin-top: 15px;
-  color: teal;
-  border: 1px solid teal;
-}
-.input {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px 15px;
-  margin-top: 15px;
 }
 </style>
