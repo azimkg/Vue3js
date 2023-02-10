@@ -1,6 +1,6 @@
 <template>
-  <div v-if="posts.length > 0">
-    <h3>Список ползователей</h3>
+  <div v-if="posts?.length > 0">
+    <h3>Список пользователей</h3>
     <post-item
       :key="post.id"
       :post="post"
